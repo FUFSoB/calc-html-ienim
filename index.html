@@ -195,5 +195,112 @@
             Виноградов Артём <br/> Ильин Ярослав <br/> Трапезникова Дарина
         </div>
     </div>
+
+    <script>
+    const calculator = {
+        display: '0',
+        first: null,
+        operator: null,
+        waitingForSecond: false,
+        history: '',
+
+        update() {
+            document.getElementById('display').textContent = this.display;
+            document.getElementById('history').textContent = this.history;
+        },
+
+        number(n) {
+            if (this.waitingForSecond) {
+                this.display = n;
+                this.waitingForSecond = false;
+            } else {
+                this.display = this.display === '0' ? n : this.display + n;
+            }
+            this.update();
+        },
+
+        decimal() {
+            if (this.waitingForSecond) {
+                this.display = '0.';
+                this.waitingForSecond = false;
+            } else if (!this.display.includes('.')) {
+                this.display += '.';
+            }
+            this.update();
+        },
+
+        operation(op) {
+            const value = parseFloat(this.display);
+
+            if (this.first === null) {
+                this.first = value;
+            } else if (!this.waitingForSecond) {
+                this.first = this.compute(this.first, value, this.operator);
+                this.display = String(this.first);
+            }
+
+            this.operator = op;
+            this.waitingForSecond = true;
+            this.history = `${this.first} ${op}`;
+            this.update();
+        },
+
+        equals() {
+            if (this.first === null || this.operator === null || this.waitingForSecond) return;
+
+            const second = parseFloat(this.display);
+            const result = this.compute(this.first, second, this.operator);
+
+            this.history = `${this.first} ${this.operator} ${second} =`;
+            this.display = String(result);
+
+            this.first = result;
+            this.operator = null;
+            this.waitingForSecond = true;
+            this.update();
+        },
+
+        compute(a, b, op) {
+            switch (op) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '×': return a * b;
+                case '÷': return b === 0 ? 0 : a / b;
+            }
+        },
+
+        backspace() {
+            if (this.waitingForSecond) return;
+
+            this.display =
+                this.display.length > 1 ? this.display.slice(0, -1) : '0';
+            this.update();
+        },
+
+        clear() {
+            this.display = '0';
+            this.first = null;
+            this.operator = null;
+            this.waitingForSecond = false;
+            this.history = '';
+            this.update();
+        }
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key >= '0' && e.key <= '9') calculator.number(e.key);
+        else if (e.key === '.') calculator.decimal();
+        else if (e.key === '+' || e.key === '-') calculator.operation(e.key);
+        else if (e.key === '*') calculator.operation('×');
+        else if (e.key === '/') {
+            e.preventDefault();
+            calculator.operation('÷');
+        }
+        else if (e.key === '=' || e.key === 'Enter') calculator.equals();
+        else if (e.key === 'Backspace') calculator.backspace();
+        else if (e.key === 'Escape' || e.key.toLowerCase() === 'c') calculator.clear();
+    });
+    </script>
+
 </body>
 </html>
