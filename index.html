@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display-container">
+            <div class="history" id="history"></div>
+            <div class="display" id="display">0</div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn-clear" onclick="calculator.clear()">AC</button>
+            <button class="btn-backspace" onclick="calculator.backspace()">⌫</button>
+            <button class="btn-operation" onclick="calculator.operation('÷')">÷</button>
+
+            <button onclick="calculator.number('7')">7</button>
+            <button onclick="calculator.number('8')">8</button>
+            <button onclick="calculator.number('9')">9</button>
+            <button class="btn-operation" onclick="calculator.operation('×')">×</button>
+
+            <button onclick="calculator.number('4')">4</button>
+            <button onclick="calculator.number('5')">5</button>
+            <button onclick="calculator.number('6')">6</button>
+            <button class="btn-operation" onclick="calculator.operation('-')">-</button>
+
+            <button onclick="calculator.number('1')">1</button>
+            <button onclick="calculator.number('2')">2</button>
+            <button onclick="calculator.number('3')">3</button>
+            <button class="btn-operation" onclick="calculator.operation('+')">+</button>
+
+            <button class="col-span-2" onclick="calculator.number('0')">0</button>
+            <button onclick="calculator.decimal()">.</button>
+            <button class="btn-equals" onclick="calculator.equals()">=</button>
+        </div>
+
+        <div class="credits">
+            Виноградов Артём <br/> Ильин Ярослав <br/> Трапезникова Дарина
+        </div>
+    </div>
+</body>
+</html>
