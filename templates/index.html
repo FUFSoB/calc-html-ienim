@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fce7f3 0%, #e9d5ff 50%, #dbeafe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .calculator {
+            background: linear-gradient(135deg, #fbcfe8 0%, #d8b4fe 100%);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+            width: 100%;
+            max-width: 31rem;
+            border: 4px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .display-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+            border: 2px solid rgba(236, 72, 153, 0.5);
+        }
+
+        .history {
+            color: #c084fc;
+            text-align: right;
+            word-wrap: break-word;
+            min-height: 28px;
+            font-size: 1rem;
+        }
+
+        .display {
+            color: #9333ea;
+            text-align: right;
+            word-wrap: break-word;
+            font-size: 2.25rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        button {
+            height: 4rem;
+            font-size: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            color: #9333ea;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            outline: none;
+        }
+
+        button:hover {
+            background: white;
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-clear {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #f9a8d4 0%, #f472b6 100%);
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+        }
+
+        .btn-backspace {
+            background: linear-gradient(135deg, #d8b4fe 0%, #c084fc 100%);
+            color: white;
+        }
+
+        .btn-backspace:hover {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+        }
+
+        .btn-operation {
+            background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+            color: white;
+        }
+
+        .btn-operation:hover {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+        }
+
+        .btn-equals {
+            background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+            color: white;
+        }
+
+        .btn-equals:hover {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        }
+
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
+        .credits {
+            text-align: center;
+            color: rgba(147, 51, 234, 0.8);
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 640px) {
+            .calculator {
+                padding: 1.5rem;
+            }
+
+            .display {
+                font-size: 1.875rem;
+            }
+
+            button {
+                height: 3.5rem;
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display-container">
+            <div class="history" id="history"></div>
+            <div class="display" id="display">0</div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn-clear" onclick="calculator.clear()">AC</button>
+            <button class="btn-backspace" onclick="calculator.backspace()">⌫</button>
+            <button class="btn-operation" onclick="calculator.operation('÷')">÷</button>
+
+            <button onclick="calculator.number('7')">7</button>
+            <button onclick="calculator.number('8')">8</button>
+            <button onclick="calculator.number('9')">9</button>
+            <button class="btn-operation" onclick="calculator.operation('×')">×</button>
+
+            <button onclick="calculator.number('4')">4</button>
+            <button onclick="calculator.number('5')">5</button>
+            <button onclick="calculator.number('6')">6</button>
+            <button class="btn-operation" onclick="calculator.operation('-')">-</button>
+
+            <button onclick="calculator.number('1')">1</button>
+            <button onclick="calculator.number('2')">2</button>
+            <button onclick="calculator.number('3')">3</button>
+            <button class="btn-operation" onclick="calculator.operation('+')">+</button>
+
+            <button class="col-span-2" onclick="calculator.number('0')">0</button>
+            <button onclick="calculator.decimal()">.</button>
+            <button class="btn-equals" onclick="calculator.equals()">=</button>
+        </div>
+
+        <div class="credits">
+            Виноградов Артём <br/> Ильин Ярослав <br/> Трапезникова Дарина
+        </div>
+    </div>
+
+    <script>
+    const calculator = {
+        display: '0',
+        first: null,
+        operator: null,
+        waitingForSecond: false,
+        history: '',
+
+        update() {
+            document.getElementById('display').textContent = this.display;
+            document.getElementById('history').textContent = this.history;
+        },
+
+        number(n) {
+            if (this.waitingForSecond) {
+                this.display = n;
+                this.waitingForSecond = false;
+            } else {
+                this.display = this.display === '0' ? n : this.display + n;
+            }
+            this.update();
+        },
+
+        decimal() {
+            if (this.waitingForSecond) {
+                this.display = '0.';
+                this.waitingForSecond = false;
+            } else if (!this.display.includes('.')) {
+                this.display += '.';
+            }
+            this.update();
+        },
+
+        operation(op) {
+            const value = parseFloat(this.display);
+
+            if (this.first === null) {
+                this.first = value;
+            } else if (!this.waitingForSecond) {
+                this.first = this.compute(this.first, value, this.operator);
+                this.display = String(this.first);
+            }
+
+            this.operator = op;
+            this.waitingForSecond = true;
+            this.history = `${this.first} ${op}`;
+            this.update();
+        },
+
+        equals() {
+            if (this.first === null || this.operator === null || this.waitingForSecond) return;
+
+            const second = parseFloat(this.display);
+            const result = this.compute(this.first, second, this.operator);
+
+            this.history = `${this.first} ${this.operator} ${second} =`;
+            this.display = String(result);
+
+            this.first = result;
+            this.operator = null;
+            this.waitingForSecond = true;
+            this.update();
+        },
+
+        compute(a, b, op) {
+            switch (op) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '×': return a * b;
+                case '÷': return b === 0 ? 0 : a / b;
+            }
+        },
+
+        backspace() {
+            if (this.waitingForSecond) return;
+
+            this.display =
+                this.display.length > 1 ? this.display.slice(0, -1) : '0';
+            this.update();
+        },
+
+        clear() {
+            this.display = '0';
+            this.first = null;
+            this.operator = null;
+            this.waitingForSecond = false;
+            this.history = '';
+            this.update();
+        }
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key >= '0' && e.key <= '9') calculator.number(e.key);
+        else if (e.key === '.') calculator.decimal();
+        else if (e.key === '+' || e.key === '-') calculator.operation(e.key);
+        else if (e.key === '*') calculator.operation('×');
+        else if (e.key === '/') {
+            e.preventDefault();
+            calculator.operation('÷');
+        }
+        else if (e.key === '=' || e.key === 'Enter') calculator.equals();
+        else if (e.key === 'Backspace') calculator.backspace();
+        else if (e.key === 'Escape' || e.key.toLowerCase() === 'c') calculator.clear();
+    });
+    </script>
+
+</body>
+</html>
